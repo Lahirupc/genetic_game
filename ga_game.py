@@ -116,12 +116,10 @@ sample_population = []
 sample_fitness = np.random.uniform(low=0.2, high=1.0, size=(10,))
 
 for i in range(0, 10):
-    sampl = np.random.uniform(low=0.2, high=1.0, size=(504,))
+    sampl = np.random.uniform(low=0.2, high=1.0, size=(210,))
     sample_population.append(sampl)
 
 
-
-
-print(sample_population)
-print(createNewPopulation(sample_population, sample_fitness))
+#print(sample_population)
+print(len(createNewPopulation(sample_population, sample_fitness)[0][:168]))
 
