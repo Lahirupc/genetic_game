@@ -11,9 +11,10 @@ y_train = keras.utils.to_categorical(np.random.randint(3, size=(1000, 1)), num_c
 # x_test = np.random.random((100, 12))
 # y_test = keras.utils.to_categorical(np.random.randint(3, size=(100, 1)), num_classes=3)
 
+
 def init_ann(weights):
     model = Sequential()
-    layer1 = Dense(14, activation='relu', weights=[np.reshape(weights[:168],(12,14)),weights[0]], input_dim=12)
+    layer1 = Dense(14, activation='relu', weights=[weights,weights[0]], input_dim=12)
     
     #weights_layer1 = np.reshape(weights[:168],(12,14))
     #layer1.set_weights(weights_layer1)
@@ -53,14 +54,16 @@ sample_population = []
 sample_fitness = np.random.uniform(low=0.2, high=1.0, size=(10,))
 
 for i in range(0, 10):
-    sampl = np.random.uniform(low=0.2, high=1.0, size=(504,))
+    sampl = np.random.uniform(low=0.2, high=1.0, size=(210,))
     sample_population.append(sampl)
 
 # print(sample_population)
 # print(createNewPopulation(sample_population, sample_fitness))
 
 weights = ga.createNewPopulation(sample_population, sample_fitness)
-model = init_ann(weights[0])
+print(weights[0][:168])
+print(np.shape(np.reshape(weights[0][:168], (12,14))))
+model = init_ann(np.reshape(weights[0][:168], (12,14)))
 model_train(x_train, y_train)
 
 

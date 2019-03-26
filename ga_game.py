@@ -1,5 +1,3 @@
-__author__ = 'shash'
-
 import numpy as np
 import math
 from random import randint
@@ -112,14 +110,14 @@ def nextGeneration(population, offSprings, fitnessArray):
     return nextGenerationTemp
 
 
-sample_population = []
-sample_fitness = np.random.uniform(low=0.2, high=1.0, size=(10,))
+# sample_population = []
+# sample_fitness = np.random.uniform(low=0.2, high=1.0, size=(10,))
 
-for i in range(0, 10):
-    sampl = np.random.uniform(low=0.2, high=1.0, size=(210,))
-    sample_population.append(sampl)
+# for i in range(0, 10):
+#     sampl = np.random.uniform(low=0.2, high=1.0, size=(210,))
+#     sample_population.append(sampl)
 
 
-#print(sample_population)
-print(len(createNewPopulation(sample_population, sample_fitness)[0][:168]))
+# #print(sample_population)
+# print(len(createNewPopulation(sample_population, sample_fitness)[0][:168]))
 
