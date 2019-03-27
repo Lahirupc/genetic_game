@@ -14,7 +14,7 @@ y_train = keras.utils.to_categorical(np.random.randint(3, size=(1000, 1)), num_c
 
 def init_ann(weights):
     model = Sequential()
-    layer1 = Dense(14, activation='relu', weights=[weights,weights[0]], input_dim=12)
+    layer1 = Dense(14, activation='relu', weights=[weights[1:],weights[0]], input_dim=12)
     
     #weights_layer1 = np.reshape(weights[:168],(12,14))
     #layer1.set_weights(weights_layer1)
@@ -32,16 +32,10 @@ def init_ann(weights):
               metrics=['accuracy'])
 
     print(np.shape(layer1.get_weights()))
-    print(np.shape(np.reshape(weights[:168],(12,14))))
+    print(np.shape(np.reshape(weights[1:169],(12,14))))
     model.summary()
     return model
 
-# def set_weights(model, weights):
-#     weights_layer1 = weights[:168]
-#     weights_output_layer = weights[168:]
-#     model.layer1.set_weights(weights_layer1)
-#     model.output_layer.set_weights(weights_output_layer)
-#     return model
 
 # Inputs should be given here.
 def model_train(x_train, y_train):
@@ -50,6 +44,10 @@ def model_train(x_train, y_train):
 # def model_test():
 #     score = model.evaluate(x_test, y_test, batch_size=128)
 
+def model_predict(x_data_point):    
+    prediction = model.predict(x_data_point)
+    print(prediction)
+
 sample_population = []
 sample_fitness = np.random.uniform(low=0.2, high=1.0, size=(10,))
 
@@ -57,13 +55,10 @@ for i in range(0, 10):
     sampl = np.random.uniform(low=0.2, high=1.0, size=(210,))
     sample_population.append(sampl)
 
-# print(sample_population)
-# print(createNewPopulation(sample_population, sample_fitness))
-
 weights = ga.createNewPopulation(sample_population, sample_fitness)
-print(weights[0][:168])
-print(np.shape(np.reshape(weights[0][:168], (12,14))))
-model = init_ann(np.reshape(weights[0][:168], (12,14)))
+
+model = init_ann(np.reshape(weights[0][:169], (12,14)))
+
 model_train(x_train, y_train)
 
 
