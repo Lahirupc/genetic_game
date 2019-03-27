@@ -13,13 +13,8 @@ y_train = keras.utils.to_categorical(np.random.randint(3, size=(1000, 1)), num_c
 
 
 def init_ann(weights):
-<<<<<<< HEAD
-    model = Sequential()
-    layer1 = Dense(14, activation='relu', weights=[weights[1:],weights[0]], input_dim=12)
-=======
     w1 = np.reshape(weights[0][:168], (12,14))
     w2 = np.reshape(weights[0][168:], (14,3))
->>>>>>> 98e7e86... Prediction using model was implemented
     
     model = Sequential()
     layer1 = Dense(14, activation='relu', weights=[w1,w1[0]], input_dim=12)
@@ -33,18 +28,9 @@ def init_ann(weights):
               optimizer='rmsprop',
               metrics=['accuracy'])
 
-<<<<<<< HEAD
-    print(np.shape(layer1.get_weights()))
-    print(np.shape(np.reshape(weights[1:169],(12,14))))
     model.summary()
     return model
 
-
-=======
-    model.summary()
-    return model
-
->>>>>>> 98e7e86... Prediction using model was implemented
 # Inputs should be given here.
 def model_train(model, x_train, y_train):
     model.fit(x_train, y_train, epochs=20, batch_size=64)
@@ -52,14 +38,8 @@ def model_train(model, x_train, y_train):
 # def model_test():
 #     score = model.evaluate(x_test, y_test, batch_size=128)
 
-<<<<<<< HEAD
-def model_predict(x_data_point):    
-    prediction = model.predict(x_data_point)
-    print(prediction)
-=======
 def model_predict(model, x):
     model.predict(x)
->>>>>>> 98e7e86... Prediction using model was implemented
 
 sample_population = []
 sample_fitness = np.random.uniform(low=0.2, high=1.0, size=(10,))
@@ -69,17 +49,11 @@ for i in range(0, 10):
     sample_population.append(sampl)
 
 weights = ga.createNewPopulation(sample_population, sample_fitness)
-<<<<<<< HEAD
-
-model = init_ann(np.reshape(weights[0][:169], (12,14)))
-
-=======
 print(weights[0][:168])
 weightz = np.reshape(weights[0][:168], (12,14))
 print(np.shape(weightz))
 print(np.shape(weightz[0]))
 model = init_ann(weights)
->>>>>>> 98e7e86... Prediction using model was implemented
 model_train(x_train, y_train)
 
 
