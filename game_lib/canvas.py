@@ -1,11 +1,14 @@
+from game_lib.evolution import createNewPopulation
 from game_lib.sprites import *
 
 
 class GamePlay:
-    def __init__(self, no_players, mario_properties, obstacles: List[Union[Mushroom, Fireball]], resolution, background,
-                 frame_rate=30, caption="Mario!"):
+    def __init__(self, no_players, mario_properties, obstacles: List[Union[Mushroom, Fireball]], resolution, max_score,
+                 background, frame_rate=30, caption="Mario!"):
         self.obstacles = obstacles
         self.frame_rate = frame_rate
+        self.max_score = max_score
+        self.no_players = no_players
 
         self.screen = pygame.display.set_mode(resolution)
         self.clock = pygame.time.Clock()
@@ -35,6 +38,8 @@ class GamePlay:
         pygame.init()
         pygame.font.init()
 
+        round = 1
+
         _state = None
         while True:
             self.mario_group.update(self.obstacles)
@@ -49,9 +54,14 @@ class GamePlay:
                 if not obstacle.released:
                     continue
                 for player in self.players:
-                    if player.rect.colliderect(obstacle.rect):
+                    if player.rect.colliderect(obstacle.rect) or player.score >= self.max_score:
                         if player.score > 40:
                             player.game_over = True
+
+            if all(player.finished for player in self.players):
+                round += 1
+                print("Round", round)
+                self.respawn_players()
 
             self.screen.blit(self.background, (0, 0))
             self.mario_group.draw(self.screen)
@@ -60,24 +70,31 @@ class GamePlay:
             pygame.display.update()
             self.clock.tick(self.frame_rate)
 
-
         print("\nfinal scores!")
         for player in self.players:
-            print(player, player.score)
-        # self.game_over_screen()
+            print(player, player.fitness)
+        self.game_over_screen()
 
-    # def game_over_screen(self):
-    #     _font = pygame.font.SysFont('Purisa', 50)
-    #     text_surface = _font.render('Game Over', False, (0, 0, 0))
-    #     self.screen.blit(text_surface, (self.screen_w // 2 - text_surface.get_width() // 2,
-    #                                     self.screen_h // 2 - text_surface.get_height() // 2))
-    #     _font2 = pygame.font.SysFont('Purisa', 20)
-    #     text_surface_2 = _font2.render('Press Enter to restart. ESC to quit', True, (0, 0, 0))
-    #     self.screen.blit(text_surface_2, (self.screen_w // 2 - text_surface_2.get_width() // 2,
-    #                                       self.screen_h // 2 + 30))
+    def game_over_screen(self):
+        # display some stats and shit
+        pass
+
+    def respawn_players(self):
+        genes = [player.get_gene() for player in self.players]
+        fitnesses = [player.fitness for player in self.players]
+        gene_pool = self.get_new_gene_pool(genes, fitnesses)
+
+        for player, gene in zip(self.players, gene_pool):
+            player.respawn(gene)
+
+
+# TODO: From here onwards
 
     def get_init_gene(self) -> np.ndarray:
-        pass
+        return np.random.uniform(low=0.2, high=1.0, size=(210,))
 
-    def get_new_gene_pool(self, genes: List[np.ndarray]) -> List[np.ndarray]:
-        pass
+    def get_new_gene_pool(self, genes: List[np.ndarray], fitnesses) -> List[np.ndarray]:
+        # do stuff and create new gene pool using existing genes `genes`
+        print(genes, fitnesses)
+        return createNewPopulation(genes,fitnesses)
+        #return [[]] * self.no_players  # just to make the code work. remove when actual code is inserted
