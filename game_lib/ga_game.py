@@ -4,9 +4,9 @@ from random import randint
 import random
 
 def createNewPopulation(population, fitnessArray):
-    populationSize = 10
-    offSpringsPoolPropotion = 0.5
-    mutationProbability = 0.2
+    populationSize = len(fitnessArray)
+    offSpringsPoolPropotion = 0.8
+    mutationProbability = 0.7
 
     avgFitness = []
     totalPopulationFitness = sum(fitnessArray)
@@ -15,9 +15,7 @@ def createNewPopulation(population, fitnessArray):
     mutatedOffsprings = mutatedPool(offSprings, mutationProbability)
     avgFitness.append(totalPopulationFitness / populationSize)
     population = nextGeneration(population, mutatedOffsprings,fitnessArray)
-
-    return population
-
+    return  population
 
 # parent pool selection stochastic universal sampling
 def matingPool(population, fitnessArray, matingPoolPropotion):
@@ -84,13 +82,10 @@ def mutatedPool(offSprings, mutationRate):
         position1 = randint(0, len(offSprings[0]) - 1)
         position2 = randint(0, len(offSprings[0]) - 1)
 
-        position1Value = offSprings[i][position1]
-        position2Value = offSprings[i][position2]
 
         if decider < mutationRate:
-            offSprings[i][position1] = position2Value
-            offSprings[i][position2] = position1Value
-
+            offSprings[i][position1] = offSprings[i][position1] +  random.uniform(0, 1)*0.5
+            offSprings[i][position2] = offSprings[i][position2] +  random.uniform(0, 1)*0.5
     return offSprings
 
 
@@ -109,6 +104,20 @@ def nextGeneration(population, offSprings, fitnessArray):
 
     return nextGenerationTemp
 
+
+if __name__ == "__main__":
+    init_genes = [np.random.uniform(low=0.2, high=1.0, size=(5,)) for _ in range(5)]
+    fitness_arr = [np.random.randint(50,100) for _ in range(5)]
+
+    new_pop = createNewPopulation(init_genes, fitness_arr)
+
+    print("init genes:")
+    for g in init_genes:
+        print(g)
+
+    print("\nnew pop:")
+    for g in new_pop:
+        print(g)
 
 # sample_population = []
 # sample_fitness = np.random.uniform(low=0.2, high=1.0, size=(10,))

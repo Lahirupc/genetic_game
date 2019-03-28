@@ -1,7 +1,8 @@
 import pygame
 import numpy as np
 from typing import Union, List
-
+import ann
+import ga_game as ga 
 from pygame.sprite import Sprite, Group
 
 
@@ -260,9 +261,10 @@ class Mario(Sprite):
 
 # TODO: From here onwards
 
-    def init_nn(self, gene):
+    def init_nn(self, chromosome):
         # initialize the neural network
         # set initial weights from the gene
+        self.model = ann.init_ann(chromosome)
         pass
 
     def nn(self, obstacles: List[Union[Mushroom, Fireball]]):
@@ -272,10 +274,13 @@ class Mario(Sprite):
             input_.extend([obstacle.rect.x, obstacle.rect.y, obstacle.velocity])
         pass
 
+        
+
     def back_propagate_nn(self):
         # update weights of the NN
         # self.last_action contains last action ["jump","duck","reset"]
         # calculate error and update the NN upon that
+        self.model.train()
         pass
 
     def get_gene(self):

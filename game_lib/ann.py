@@ -32,13 +32,13 @@ def init_ann(weights):
     return model
 
 # Inputs should be given here.
-def model_train(model, x_train, y_train):
+def train(model, x_train, y_train):
     model.fit(x_train, y_train, epochs=20, batch_size=64)
 
 # def model_test():
 #     score = model.evaluate(x_test, y_test, batch_size=128)
 
-def model_predict(model, x):
+def predict(model, x):
     model.predict(x)
 
 sample_population = []
