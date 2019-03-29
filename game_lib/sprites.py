@@ -192,7 +192,7 @@ class Mario(Sprite):
             self.reset_pos()
             self.fitness = self.score
             self.score = 0
-            self.back_propagate_nn()
+            self.back_propagate_nn(arg)
             self.game_over = False
             return
 
@@ -290,10 +290,17 @@ class Mario(Sprite):
 
         
 
-    def back_propagate_nn(self):
+    def back_propagate_nn(self, obstacles: List[Union[Mushroom, Fireball]]):
         # update weights of the NN
         # self.last_action contains last action ["jump","duck","rest"]
         # calculate error and update the NN upon that
+
+        input_ = []
+        for obstacle in obstacles:
+            input_.extend([obstacle.rect.x, obstacle.rect.y, obstacle.velocity])
+
+        x = np.array(input_)
+
         actions = ['jump','duck','reset']
         remaining_actions = actions.remove(self.last_action)
         if self.last_action == 'rest':
