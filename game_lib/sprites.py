@@ -290,16 +290,30 @@ class Mario(Sprite):
 
         
 
-    def back_propagate_nn(self):
+    def back_propagate_nn(self, obstacles):
         # update weights of the NN
         # self.last_action contains last action ["jump","duck","rest"]
         # calculate error and update the NN upon that
-        actions = ['jump','duck','reset']
-        remaining_actions = actions.remove(self.last_action)
-        if self.last_action == 'rest':
-            y = []
-        y = choice(remaining_actions)
-        self.model = ann.train(self.model, self.last_action, y)
+        if self.last_action == 'reset':
+            x = np.array([0,0,1],dtype='float32')
+            #y = choice(['jump','duck']) shape (1,3)
+            y = choice([[0,1,0],[1,0,0]])
+            y = np.array(y,dtype='float32')
+
+        elif self.last_action == 'duck':
+            x = np.array([0,1,0],dtype='float32')
+            #y = choice(['jump','reset'])
+            y = choice([[1,0,0],[0,0,1]])
+        else:
+            x = np.array([1,0,0],dtype='float32')
+            #y = choice(['duck','reset'])
+            y = choice([[0,1,0],[0,0,1]])
+        
+
+            #x = [] # shape (1, 12)
+
+
+        self.model = ann.train(self.model, x, y)
 
 
     def get_gene(self):
