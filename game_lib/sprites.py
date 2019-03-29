@@ -1,8 +1,9 @@
 import pygame
 import numpy as np
 from typing import Union, List
-import ann
-import ga_game as ga 
+import game_lib.ann as ann
+import game_lib.ga_game as ga
+from random import choice
 from pygame.sprite import Sprite, Group
 
 
@@ -234,7 +235,7 @@ class Mario(Sprite):
         self.score += 1
 
     def play(self, obstacles) -> str:
-        return self.bogus_nn(obstacles)
+        return self.nn(obstacles)
 
     def bogus_nn(self, obstacles: List[Union[Mushroom, Fireball]]):
         state = ""
@@ -261,32 +262,52 @@ class Mario(Sprite):
 
 # TODO: From here onwards
 
-    def init_nn(self, chromosome):
+    def init_nn(self, gene):
         # initialize the neural network
         # set initial weights from the gene
-        self.model = ann.init_ann(chromosome)
-        pass
+        self.model, self.layer1, self.out_layer = ann.init_ann(gene)
 
     def nn(self, obstacles: List[Union[Mushroom, Fireball]]):
         # return state using inputs obstacle.rect.x, obstacle.rect.y, obstacle.velocity
         input_ = []
         for obstacle in obstacles:
             input_.extend([obstacle.rect.x, obstacle.rect.y, obstacle.velocity])
-        pass
+
+        x = np.array(input_)
+
+        y_prediction = ann.predict(self.model, x)
+
+        index = np.argmax(y_prediction)
+        # return the output of the ann as a string: 'jump'.
+        if index == 0:
+            y = 'jump'
+        elif index == 1:
+            y = 'duck'
+        else:
+            y = 'reset'
+
+        return y
 
         
 
     def back_propagate_nn(self):
         # update weights of the NN
-        # self.last_action contains last action ["jump","duck","reset"]
+        # self.last_action contains last action ["jump","duck","rest"]
         # calculate error and update the NN upon that
-        self.model.train()
-        pass
+        actions = ['jump','duck','reset']
+        remaining_actions = actions.remove(self.last_action)
+        if self.last_action == 'rest':
+            y = []
+        y = choice(remaining_actions)
+        self.model = ann.train(self.model, self.last_action, y)
+
 
     def get_gene(self):
         # return updated gene when called
         # need to extract weights from the NN
-        pass
+        l1_weights = self.layer1.get_weights() # 12*14 nodes
+        ol_weights = self.out_layer.get_weights() # 14*3 nodes
+        return np.array(l1_weights.extend(ol_weights))
 
 # TODO: to here
 

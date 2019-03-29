@@ -3,18 +3,19 @@ import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation
 from keras.optimizers import SGD
-import ga_game as ga
+import game_lib.ga_game as ga
 
 # # Generate dummy data
 x_train = np.random.random((1000, 12))
-y_train = keras.utils.to_categorical(np.random.randint(3, size=(1000, 1)), num_classes=3)
+y_data = np.random.randint(3, size=1000)
+y_train = keras.utils.to_categorical(np.random.randint(3, size=1000), num_classes=3)
 # x_test = np.random.random((100, 12))
 # y_test = keras.utils.to_categorical(np.random.randint(3, size=(100, 1)), num_classes=3)
 
 
 def init_ann(weights):
-    w1 = np.reshape(weights[0][:168], (12,14))
-    w2 = np.reshape(weights[0][168:], (14,3))
+    w1 = np.reshape(weights[:168], (12,14))
+    w2 = np.reshape(weights[168:], (14,3))
     
     model = Sequential()
     layer1 = Dense(14, activation='relu', weights=[w1,w1[0]], input_dim=12)
@@ -29,17 +30,22 @@ def init_ann(weights):
               metrics=['accuracy'])
 
     model.summary()
-    return model
+    return model, layer1, output_layer
 
 # Inputs should be given here.
 def train(model, x_train, y_train):
     model.fit(x_train, y_train, epochs=20, batch_size=64)
+    return model
 
 # def model_test():
 #     score = model.evaluate(x_test, y_test, batch_size=128)
 
+# def get_weights(model):
+#     model.
+
 def predict(model, x):
-    model.predict(x)
+    return model.predict(np.reshape(x, (1,12)))
+
 
 sample_population = []
 sample_fitness = np.random.uniform(low=0.2, high=1.0, size=(10,))
@@ -49,11 +55,15 @@ for i in range(0, 10):
     sample_population.append(sampl)
 
 weights = ga.createNewPopulation(sample_population, sample_fitness)
-print(weights[0][:168])
-weightz = np.reshape(weights[0][:168], (12,14))
-print(np.shape(weightz))
-print(np.shape(weightz[0]))
-model = init_ann(weights)
-model_train(x_train, y_train)
+# print(weights[0][:168])
+# weightz = np.reshape(weights[0][:168], (12,14))
+# print(np.shape(weightz))
+# print(np.shape(weightz[0]))
+
+model, layer1, output_layer = init_ann(weights[0])
+model = train(model, x_train, y_train)
+x = np.reshape(x_train[5], (1,12))
+y = predict(model, x)
+print(y)
 
 

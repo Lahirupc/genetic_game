@@ -1,6 +1,6 @@
-from game_lib.evolution import createNewPopulation
+from game_lib.ga_game import createNewPopulation
 from game_lib.sprites import *
-
+#import game_lib.sprites
 
 class GamePlay:
     def __init__(self, no_players, mario_properties, obstacles: List[Union[Mushroom, Fireball]], resolution, max_score,

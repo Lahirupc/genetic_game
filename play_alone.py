@@ -2,9 +2,9 @@ from game_lib.canvas import GamePlay
 from game_lib.sprites import Mario, Mushroom, Fireball, ObstacleGroup, MarioGroup
 import pygame
 
-NO_PLAYERS = 5
-BACKPROPEGATION_UPDATE_COUNT = 5
-MAX_POINTS = 100
+NO_PLAYERS = 5 # population 
+BACKPROPEGATION_UPDATE_COUNT = 5 # best player 
+MAX_POINTS = 100 # game depth
 
 resolution = (800, 400)
 caption = "Mario! :D"
