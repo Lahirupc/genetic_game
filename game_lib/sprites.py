@@ -273,7 +273,7 @@ class Mario(Sprite):
         for obstacle in obstacles:
             input_.extend([obstacle.rect.x, obstacle.rect.y, obstacle.velocity])
 
-        x = np.array(input_)
+        x = np.reshape(np.array(input_), (1,12))
 
         y_prediction = ann.predict(self.model, x)
 
@@ -299,25 +299,28 @@ class Mario(Sprite):
         for obstacle in obstacles:
             input_.extend([obstacle.rect.x, obstacle.rect.y, obstacle.velocity])
 
-        x = np.array(input_)
         
+        x = np.reshape(np.array(input_), (1,12))
+
         if self.last_action == 'reset':
-            x = np.array([0,0,1],dtype='float32')
+            #x = np.array([0,0,1],dtype='float32')
             #y = choice(['jump','duck']) shape (1,3)
-            y = choice([[0,1,0],[1,0,0]])
-            y = np.array(y,dtype='float32')
+            #y = choice([[0,1,0],[1,0,0]])
+            y = [1,1,0]
 
         elif self.last_action == 'duck':
-            x = np.array([0,1,0],dtype='float32')
+            #x = np.array([0,1,0],dtype='float32')
             #y = choice(['jump','reset'])
-            y = choice([[1,0,0],[0,0,1]])
+            #y = choice([[1,0,0],[0,0,1]])
+            y = [1,0,1]
         else:
-            x = np.array([1,0,0],dtype='float32')
+            #x = np.array([1,0,0],dtype='float32')
             #y = choice(['duck','reset'])
-            y = choice([[0,1,0],[0,0,1]])
-        
+            #y = choice([[0,1,0],[0,0,1]])
+            y = [0,1,1]
 
             #x = [] # shape (1, 12)
+        y = np.reshape(np.array(y), (1,3))
 
 
         self.model = ann.train(self.model, x, y)
@@ -328,7 +331,8 @@ class Mario(Sprite):
         # need to extract weights from the NN
         l1_weights = self.layer1.get_weights() # 12*14 nodes
         ol_weights = self.out_layer.get_weights() # 14*3 nodes
-        return np.array(l1_weights.extend(ol_weights))
+        gene = np.append(l1_weights[0],ol_weights[0])
+        return np.array(gene) # considering only weights here
 
 # TODO: to here
 

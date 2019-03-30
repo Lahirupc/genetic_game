@@ -105,19 +105,19 @@ def nextGeneration(population, offSprings, fitnessArray):
     return nextGenerationTemp
 
 
-if __name__ == "__main__":
-    init_genes = [np.random.uniform(low=0.2, high=1.0, size=(5,)) for _ in range(5)]
-    fitness_arr = [np.random.randint(50,100) for _ in range(5)]
+# if __name__ == "__main__":
+#     init_genes = [np.random.uniform(low=0.2, high=1.0, size=(5,)) for _ in range(5)]
+#     fitness_arr = [np.random.randint(50,100) for _ in range(5)]
 
-    new_pop = createNewPopulation(init_genes, fitness_arr)
+#     new_pop = createNewPopulation(init_genes, fitness_arr)
 
-    print("init genes:")
-    for g in init_genes:
-        print(g)
+#     print("init genes:")
+#     for g in init_genes:
+#         print(g)
 
-    print("\nnew pop:")
-    for g in new_pop:
-        print(g)
+#     print("\nnew pop:")
+#     for g in new_pop:
+#         print(g)
 
 # sample_population = []
 # sample_fitness = np.random.uniform(low=0.2, high=1.0, size=(10,))
